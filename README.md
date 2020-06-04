@@ -19,6 +19,8 @@ Maven:
 </dependency>
 ```
 
+Gradle:
+
 ```groovy
 maven {
     name 'jitpack'
@@ -27,6 +29,7 @@ maven {
 
 compile group: 'com.github.derrop', name: 'simplecommand', version: '1.0-RELEASE'
 ```
+<br>
 
 With that being done, you can now create your [DefaultCommandMap](src/main/java/com/github/derrop/simplecommand/map/DefaultCommandMap.java) to register your commands.
 
