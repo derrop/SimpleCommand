@@ -15,7 +15,7 @@ Maven:
 <dependency>
     <groupId>com.github.derrop</groupId>
     <artifactId>simplecommand</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0-RELEASE</version>
 </dependency>
 ```
 
@@ -27,7 +27,7 @@ maven {
     url 'https://jitpack.io'
 }
 
-compile group: 'com.github.derrop', name: 'simplecommand', version: '1.0-SNAPSHOT'
+compile group: 'com.github.derrop', name: 'simplecommand', version: '1.0-RELEASE'
 ```
 <br>
 
@@ -36,3 +36,9 @@ With that being done, you can now create your [DefaultCommandMap](src/main/java/
 Your first command could like [this](src/test/java/com/github/derrop/simplecommand/ExampleCommand.java), register it in your [CommandMap](src/main/java/com/github/derrop/simplecommand/map/CommandMap.java) by using the `registerSubCommands` method.
 
 When you have created your commands, you can dispatch them by using the `dispatchCommand` or `dispatchConsoleCommand` methods in your [CommandMap](src/main/java/com/github/derrop/simplecommand/map/CommandMap.java).
+
+
+## Use custom messages
+
+If you want to use your own messages, you can just call the static method CommandTranslator.useCustomMessages, this function will map the message key to a message. Every message can be found in the [DefaultMessages](src/main/java/com/github/derrop/simplecommand/defaults/DefaultMessages.java
+) class.
