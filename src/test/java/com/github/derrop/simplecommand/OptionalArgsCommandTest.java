@@ -2,7 +2,6 @@ package com.github.derrop.simplecommand;
 
 import com.github.derrop.simplecommand.annotation.Argument;
 import com.github.derrop.simplecommand.annotation.Command;
-import com.github.derrop.simplecommand.annotation.Handler;
 import com.github.derrop.simplecommand.annotation.SubCommand;
 import com.github.derrop.simplecommand.argument.ArgumentType;
 import com.github.derrop.simplecommand.argument.CommandArgumentWrapper;
@@ -12,12 +11,10 @@ import com.github.derrop.simplecommand.map.DefaultCommandMap;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Map;
-
 import static com.github.derrop.simplecommand.argument.DefaultArgumentTypes.anyStringIgnoreCase;
 import static com.github.derrop.simplecommand.argument.DefaultArgumentTypes.dynamicString;
 
-public class InfiniteArgsCommandTest {
+public class OptionalArgsCommandTest {
 
     @Command(
             aliases = {"some", "command"},
@@ -35,11 +32,11 @@ public class InfiniteArgsCommandTest {
         @Argument
         public final ArgumentType<?> arg3 = dynamicString("dyn_arg");
 
-        @SubCommand(args = {"arg1", "arg2", "arg3"}, minArgs = 3)
+        @SubCommand(args = {"arg1", "arg2", "arg3"}, minArgs = 2, showMinArgsIndicator = false)
         public void handle(CommandArgumentWrapper args, String line) {
-            Assert.assertEquals("some a1 arg2 any arg 1 2 3 4 5 6 7 8 9 10", line);
+            Assert.assertEquals("some a1 arg2", line);
 
-            Assert.assertEquals("any arg 1 2 3 4 5 6 7 8 9 10", args.argument("dyn_arg"));
+            Assert.assertFalse(args.optionalArgument("dyn_arg").isPresent());
         }
 
     }
@@ -57,9 +54,9 @@ public class InfiniteArgsCommandTest {
         Assert.assertEquals("some.permission", command.getPermission());
         Assert.assertEquals("some description", command.getDescription());
         Assert.assertEquals("some-prefix", command.getPrefix());
-        Assert.assertEquals("some arg1 arg2 <dyn_arg> ... | some.permission | some description", command.getUsage());
+        Assert.assertEquals("some arg1 arg2 [dyn_arg] | some.permission | some description", command.getUsage());
 
-        CommandExecutionResponse response = commandMap.dispatchConsoleCommand("some a1 arg2 any arg 1 2 3 4 5 6 7 8 9 10");
+        CommandExecutionResponse response = commandMap.dispatchConsoleCommand("some a1 arg2");
         Assert.assertEquals(CommandExecutionResponse.SUCCESS, response);
     }
 
