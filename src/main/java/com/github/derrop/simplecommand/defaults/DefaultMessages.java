@@ -1,4 +1,4 @@
-package com.github.derrop.simplecommand;
+package com.github.derrop.simplecommand.defaults;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,10 +10,14 @@ public class DefaultMessages {
     public static final Function<String, String> FUNCTION = MESSAGES::get;
 
     static {
-        registerMessage("argument-invalid-default", "Please provide a valid value!");
-        registerMessage("argument-show-answers", "You have to provide one of the following: %values%");
+        registerMessage("help-command-not-found", "That command doesn't exist");
+        registerMessage("help-command-info", "Use \"help <command>\" to get further information to a command");
+
         registerMessage("only-console", "This sub command is only available for the console!");
         registerMessage("no-permission", "You are not allowed to use this sub command!");
+
+        registerMessage("argument-invalid-default", "Please provide a valid value!");
+        registerMessage("argument-show-answers", "You have to provide one of the following: %values%");
         registerMessage("argument-invalid-url", "Please provide a valid URL!");
         registerMessage("argument-int-not-positive", "Please provide a positive integer!");
         registerMessage("argument-int-not-negative", "Please provide a negative integer!");

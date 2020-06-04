@@ -1,6 +1,6 @@
 package com.github.derrop.simplecommand.argument;
 
-import com.github.derrop.simplecommand.SubCommandPool;
+import com.github.derrop.simplecommand.CommandTranslator;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,9 +32,9 @@ public interface ArgumentType<T> {
     default String getInvalidInputMessage(String input) {
         Collection<String> possibleAnswers = this.getPossibleAnswers();
         if (possibleAnswers != null) {
-            return SubCommandPool.translateMessage("argument-show-answers").replace("%values%", this.getPossibleAnswersAsString());
+            return CommandTranslator.translateMessage("argument-show-answers").replace("%values%", this.getPossibleAnswersAsString());
         }
-        return SubCommandPool.translateMessage("argument-invalid-default");
+        return CommandTranslator.translateMessage("argument-invalid-default");
     }
 
 }

@@ -1,6 +1,5 @@
 package com.github.derrop.simplecommand.map;
 
-import com.github.derrop.simplecommand.SubCommandPool;
 import com.github.derrop.simplecommand.UsableCommand;
 import com.github.derrop.simplecommand.sender.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +9,10 @@ import java.util.Collection;
 
 public interface CommandMap {
 
-    void registerSubCommands(Object command);
+    void registerDefaultHelpCommand();
+
+    @Nullable
+    UsableCommand registerSubCommands(@NotNull Object command);
 
     void registerCommand(@NotNull UsableCommand command);
 

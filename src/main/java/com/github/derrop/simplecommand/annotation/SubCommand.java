@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface SubCommand {
 
-    String[] args();
+    String[] args() default {};
 
     String[] preHandlers() default {};
 

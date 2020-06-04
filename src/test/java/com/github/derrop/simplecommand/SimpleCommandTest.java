@@ -8,7 +8,6 @@ import com.github.derrop.simplecommand.argument.ArgumentType;
 import com.github.derrop.simplecommand.map.CommandExecutionResponse;
 import com.github.derrop.simplecommand.map.CommandMap;
 import com.github.derrop.simplecommand.map.DefaultCommandMap;
-import com.github.derrop.simplecommand.sender.DefaultConsoleCommandSender;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -58,11 +57,11 @@ public class SimpleCommandTest {
     public void testCommand() {
         CommandMap commandMap = new DefaultCommandMap();
 
-        UsableCommand command = Objects.requireNonNull(SubCommandPool.createSubCommandHandler(new SomeCommand()));
-        commandMap.registerCommand(command);
+        UsableCommand command = commandMap.registerSubCommands(new SomeCommand());
 
         UsableCommand newCommand = commandMap.getCommand("CoMmAnD");
         Assert.assertSame(newCommand, command);
+        Assert.assertNotNull(command);
 
         Assert.assertEquals("some.permission", command.getPermission());
         Assert.assertEquals("some description", command.getDescription());

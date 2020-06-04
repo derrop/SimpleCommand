@@ -1,7 +1,7 @@
 package com.github.derrop.simplecommand.argument.types;
 
 import com.github.derrop.simplecommand.argument.ArgumentType;
-import com.github.derrop.simplecommand.SubCommandPool;
+import com.github.derrop.simplecommand.CommandTranslator;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,7 +17,7 @@ public class ArgumentTypeBoolean implements ArgumentType<Boolean> {
     }
 
     public ArgumentTypeBoolean() {
-        this(SubCommandPool.translateMessage("argument-boolean-true"), SubCommandPool.translateMessage("argument-boolean-false"));
+        this(CommandTranslator.translateMessage("argument-boolean-true"), CommandTranslator.translateMessage("argument-boolean-false"));
     }
 
     public String getTrueString() {
@@ -50,7 +50,7 @@ public class ArgumentTypeBoolean implements ArgumentType<Boolean> {
 
     @Override
     public String getInvalidInputMessage(String input) {
-        return SubCommandPool.translateMessage("argument-invalid-boolean")
+        return CommandTranslator.translateMessage("argument-invalid-boolean")
                 .replace("%true%", this.trueString)
                 .replace("%false%", this.falseString);
     }

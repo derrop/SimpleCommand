@@ -36,8 +36,8 @@ public class ProcessedSubCommand implements SubCommandExecutor {
 
     public ProcessedSubCommand(Command command, SubCommand subCommand, ArgumentType<?>[] requiredArguments, SubCommandExecutor wrappedExecutor) {
         this.requiredArguments = requiredArguments;
-        this.permission = this.or(command.permission(), subCommand.permission());
-        this.description = this.or(command.description(), subCommand.description());
+        this.permission = this.or(subCommand.permission(), command.permission());
+        this.description = this.or(subCommand.description(), command.description());
         this.extendedUsage = subCommand.extendedUsage();
         this.consoleOnly = subCommand.consoleOnly() || command.consoleOnly();
         this.propertiesEnabled = subCommand.enableProperties();
@@ -50,7 +50,7 @@ public class ProcessedSubCommand implements SubCommandExecutor {
     }
 
     private String or(String string1, String string2) {
-        return string2.isEmpty() ? string1 : string1.isEmpty() ? null : string2;
+        return string2.isEmpty() && string1.isEmpty() ? null : string1.isEmpty() ? string2 : string1;
     }
 
     /**
@@ -128,6 +128,10 @@ public class ProcessedSubCommand implements SubCommandExecutor {
                 }
 
             } else {
+
+                if (this.requiredArguments.length == 0) {
+                    continue;
+                }
 
                 String currentValue = String.join(" ", Arrays.copyOfRange(args, Math.max(0, i - 1), Math.max(this.requiredArguments.length, Math.min(args.length, this.maxArgs))));
                 ArgumentType<?> type = this.requiredArguments[this.requiredArguments.length - 1];

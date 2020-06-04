@@ -1,6 +1,6 @@
 package com.github.derrop.simplecommand.argument.types;
 
-import com.github.derrop.simplecommand.SubCommandPool;
+import com.github.derrop.simplecommand.CommandTranslator;
 
 public class ArgumentTypeIntRange extends ArgumentTypeInt {
     private final int minValue;
@@ -33,7 +33,7 @@ public class ArgumentTypeIntRange extends ArgumentTypeInt {
 
     @Override
     public String getInvalidInputMessage(String input) {
-        return SubCommandPool.translateMessage("argument-invalid-int-range")
+        return CommandTranslator.translateMessage("argument-invalid-int-range")
                 .replace("%min%", String.valueOf(this.minValue))
                 .replace("%max%", String.valueOf(this.maxValue));
     }

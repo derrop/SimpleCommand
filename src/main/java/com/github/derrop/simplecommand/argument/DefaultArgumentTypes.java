@@ -1,7 +1,7 @@
 package com.github.derrop.simplecommand.argument;
 
 import com.github.derrop.simplecommand.argument.types.*;
-import com.github.derrop.simplecommand.SubCommandPool;
+import com.github.derrop.simplecommand.CommandTranslator;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -48,7 +48,7 @@ public class DefaultArgumentTypes {
     }
 
     public static ArgumentType<String> url(String key) {
-        return dynamicString(key, SubCommandPool.translateMessage("argument-invalid-url"), input -> {
+        return dynamicString(key, CommandTranslator.translateMessage("argument-invalid-url"), input -> {
             try {
                 new URL(input);
                 return true;
@@ -69,7 +69,7 @@ public class DefaultArgumentTypes {
     public static ArgumentType<String> dynamicString(String key, int maxLength) {
         return dynamicString(
                 key,
-                SubCommandPool.translateMessage("argument-string-too-long")
+                CommandTranslator.translateMessage("argument-string-too-long")
                         .replace("%maxLength%", String.valueOf(maxLength)),
                 value -> value.length() <= maxLength
         );
@@ -151,7 +151,7 @@ public class DefaultArgumentTypes {
     public static ArgumentType<Integer> positiveInteger(String key) {
         return integer(
                 key,
-                SubCommandPool.translateMessage("argument-int-not-positive"),
+                CommandTranslator.translateMessage("argument-int-not-positive"),
                 value -> value > 0
         );
     }
@@ -159,7 +159,7 @@ public class DefaultArgumentTypes {
     public static ArgumentType<Integer> negativeInteger(String key) {
         return integer(
                 key,
-                SubCommandPool.translateMessage("argument-int-not-negative"),
+                CommandTranslator.translateMessage("argument-int-not-negative"),
                 value -> value < 0
         );
     }

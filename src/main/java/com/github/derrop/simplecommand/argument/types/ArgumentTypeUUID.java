@@ -1,7 +1,7 @@
 package com.github.derrop.simplecommand.argument.types;
 
 import com.github.derrop.simplecommand.argument.ArgumentType;
-import com.github.derrop.simplecommand.SubCommandPool;
+import com.github.derrop.simplecommand.CommandTranslator;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -29,6 +29,6 @@ public class ArgumentTypeUUID implements ArgumentType<UUID> {
 
     @Override
     public String getInvalidInputMessage(String input) {
-        return SubCommandPool.translateMessage("argument-invalid-uuid");
+        return CommandTranslator.translateMessage("argument-invalid-uuid");
     }
 }

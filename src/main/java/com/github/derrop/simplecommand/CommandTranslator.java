@@ -1,14 +1,13 @@
 package com.github.derrop.simplecommand;
 
-import com.github.derrop.simplecommand.annotation.processor.AnnotationProcessor;
+import com.github.derrop.simplecommand.defaults.DefaultMessages;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
 
-public class SubCommandPool {
+public class CommandTranslator {
 
     public static final ExecutorService SERVICE = Executors.newCachedThreadPool();
 
@@ -20,16 +19,6 @@ public class SubCommandPool {
 
     public static String translateMessage(@NotNull String message) {
         return MESSAGE_PROVIDER.apply(message);
-    }
-
-    @Nullable
-    public static UsableCommand createSubCommandHandler(@NotNull Object command) {
-        try {
-            return AnnotationProcessor.process(command);
-        } catch (ReflectiveOperationException exception) {
-            exception.printStackTrace();
-        }
-        return null;
     }
 
 }

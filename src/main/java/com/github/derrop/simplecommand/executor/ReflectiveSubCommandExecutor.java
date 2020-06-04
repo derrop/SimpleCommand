@@ -48,7 +48,6 @@ public class ReflectiveSubCommandExecutor implements SubCommandExecutor {
                 Parameter parameter = parameters[i];
                 Class<?> type = parameter.getType();
                 Object value;
-                System.out.println(parameter.getType()+" - "+parameter.getName());
                 if (CommandSender.class.isAssignableFrom(type)) {
                     value = sender;
                 } else if (type.equals(String.class)) {

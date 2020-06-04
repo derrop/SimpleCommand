@@ -1,8 +1,9 @@
 package com.github.derrop.simplecommand.map;
 
 import com.github.derrop.simplecommand.CommandProperties;
-import com.github.derrop.simplecommand.SubCommandPool;
 import com.github.derrop.simplecommand.UsableCommand;
+import com.github.derrop.simplecommand.annotation.processor.AnnotationProcessor;
+import com.github.derrop.simplecommand.defaults.DefaultHelpCommand;
 import com.github.derrop.simplecommand.executor.TabCompleter;
 import com.github.derrop.simplecommand.sender.CommandSender;
 import com.github.derrop.simplecommand.sender.DefaultConsoleCommandSender;
@@ -18,11 +19,22 @@ public class DefaultCommandMap implements CommandMap {
     private final CommandSender consoleSender = new DefaultConsoleCommandSender();
 
     @Override
-    public void registerSubCommands(Object command) {
-        UsableCommand usableCommand = SubCommandPool.createSubCommandHandler(command);
-        if (usableCommand != null) {
-            this.registerCommand(usableCommand);
+    public void registerDefaultHelpCommand() {
+        this.registerSubCommands(new DefaultHelpCommand(this));
+    }
+
+    @Override
+    public UsableCommand registerSubCommands(@NotNull Object command) {
+        try {
+            UsableCommand usableCommand = AnnotationProcessor.process(command);
+            if (usableCommand != null) {
+                this.registerCommand(usableCommand);
+            }
+            return usableCommand;
+        } catch (ReflectiveOperationException exception) {
+            exception.printStackTrace();
         }
+        return null;
     }
 
     @Override
@@ -103,7 +115,13 @@ public class DefaultCommandMap implements CommandMap {
 
     @Override
     public @NotNull Collection<UsableCommand> getCommands() {
-        return Collections.unmodifiableCollection(this.commands.values());
+        Collection<UsableCommand> commands = new ArrayList<>();
+        for (UsableCommand command : this.commands.values()) {
+            if (!commands.contains(command)) {
+                commands.add(command);
+            }
+        }
+        return commands;
     }
 
     @Override

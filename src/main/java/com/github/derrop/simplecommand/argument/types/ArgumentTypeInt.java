@@ -1,7 +1,7 @@
 package com.github.derrop.simplecommand.argument.types;
 
 import com.github.derrop.simplecommand.argument.ArgumentType;
-import com.github.derrop.simplecommand.SubCommandPool;
+import com.github.derrop.simplecommand.CommandTranslator;
 
 import java.util.Collection;
 
@@ -29,7 +29,7 @@ public class ArgumentTypeInt implements ArgumentType<Integer> {
 
     @Override
     public String getInvalidInputMessage(String input) {
-        return SubCommandPool.translateMessage("argument-invalid-int");
+        return CommandTranslator.translateMessage("argument-invalid-int");
     }
 
 }

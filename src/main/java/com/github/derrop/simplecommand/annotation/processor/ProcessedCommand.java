@@ -2,7 +2,7 @@ package com.github.derrop.simplecommand.annotation.processor;
 
 import com.github.derrop.simplecommand.CommandProperties;
 import com.github.derrop.simplecommand.sender.CommandSender;
-import com.github.derrop.simplecommand.SubCommandPool;
+import com.github.derrop.simplecommand.CommandTranslator;
 import com.github.derrop.simplecommand.UsableCommand;
 import com.github.derrop.simplecommand.annotation.Command;
 import com.github.derrop.simplecommand.argument.CommandArgument;
@@ -85,7 +85,7 @@ public class ProcessedCommand implements UsableCommand, CommandExecutor, TabComp
 
         Optional<ParsedArguments> optionalArguments = this.subCommands.stream()
                 .map(subCommand -> new ParsedArguments(subCommand, subCommand.parseArgs(args)))
-                .filter(arguments -> arguments.getArguments() != null && arguments.getArguments().length != 0)
+                .filter(arguments -> arguments.getArguments() != null)
                 .findFirst();
 
         if (optionalInvalidMessage.isPresent() && !optionalArguments.isPresent()) {
@@ -105,17 +105,17 @@ public class ProcessedCommand implements UsableCommand, CommandExecutor, TabComp
         CommandArgument<?>[] parsedArgs = parsedArguments.getArguments();
 
         if (subCommand.isConsoleOnly() && !sender.isConsole()) {
-            sender.sendMessage(SubCommandPool.translateMessage("only-console"));
+            sender.sendMessage(CommandTranslator.translateMessage("only-console"));
             return;
         }
 
         if (subCommand.getPermission() != null && !sender.hasPermission(subCommand.getPermission())) {
-            sender.sendMessage(SubCommandPool.translateMessage("no-permission"));
+            sender.sendMessage(CommandTranslator.translateMessage("no-permission"));
             return;
         }
 
         if (subCommand.isAsync()) {
-            SubCommandPool.SERVICE.execute(() -> subCommand.execute(
+            CommandTranslator.SERVICE.execute(() -> subCommand.execute(
                     sender, command, new CommandArgumentWrapper(parsedArgs),
                     commandLine, subCommand.parseProperties(args), new HashMap<>()
             ));
