@@ -49,8 +49,8 @@ public class HelpCommandTest {
         Assert.assertEquals("Aliases: [help, ?]", messages.get(1));
         Assert.assertEquals("Description: Show a list of all commands or get help for a specific command", messages.get(2));
         Assert.assertEquals("Usage: ", messages.get(3));
-        Assert.assertEquals(" - help <command> | Get the usage for a specific command", messages.get(4));
-        Assert.assertEquals(" - help  | Show a list of all commands", messages.get(5));
+        Assert.assertEquals(" - help           | Show a list of all commands", messages.get(4));
+        Assert.assertEquals(" - help <command> | Get the usage for a specific command", messages.get(5));
     }
 
 }

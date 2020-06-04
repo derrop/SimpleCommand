@@ -1,7 +1,6 @@
 package com.github.derrop.simplecommand.annotation.processor;
 
 import com.github.derrop.simplecommand.CommandProperties;
-import com.github.derrop.simplecommand.sender.CommandSender;
 import com.github.derrop.simplecommand.CommandTranslator;
 import com.github.derrop.simplecommand.UsableCommand;
 import com.github.derrop.simplecommand.annotation.Command;
@@ -10,6 +9,8 @@ import com.github.derrop.simplecommand.argument.CommandArgumentWrapper;
 import com.github.derrop.simplecommand.argument.ParsedArguments;
 import com.github.derrop.simplecommand.executor.CommandExecutor;
 import com.github.derrop.simplecommand.executor.TabCompleter;
+import com.github.derrop.simplecommand.sender.CommandSender;
+import org.graalvm.compiler.debug.CSVUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,22 +38,37 @@ public class ProcessedCommand implements UsableCommand, CommandExecutor, TabComp
     @Override
     public String getUsage() {
         Collection<String> messages = new ArrayList<>();
-        for (ProcessedSubCommand subCommand : this.subCommands) {
-            // TODO the permissions and descriptions of every sub command should be at the same width
-            String message = this.getFirstName() + " " + subCommand.getArgsAsString() + subCommand.getExtendedUsage();
 
-            if (subCommand.getPermission() != null) {
-                message += " | " + subCommand.getPermission();
-            }
+        Collection<ProcessedCommandUsage> usages = this.subCommands.stream()
+                .map(command -> new ProcessedCommandUsage(
+                        this.getFirstName() + " " + command.getArgsAsString() + command.getExtendedUsage(),
+                        command.getPermission() == null ? "" : " | " + command.getPermission(),
+                        command.getDescription() == null ? "" : " | " + command.getDescription()
+                )).collect(Collectors.toList());
 
-            if (subCommand.getDescription() != null) {
-                message += " | " + subCommand.getDescription();
-            }
-            messages.add(message);
-        }
-        if (messages.isEmpty()) {
+        if (usages.isEmpty()) {
             return null;
         }
+
+        int longestBase = usages.stream().mapToInt(value -> value.getBaseMessage().length()).max().getAsInt();
+        int longestPermission = usages.stream().mapToInt(value -> value.getPermission().length()).max().getAsInt();
+
+        for (ProcessedCommandUsage usage : usages) {
+            StringBuilder message = new StringBuilder(usage.getBaseMessage());
+            for (int i = 0; i < longestBase - usage.getBaseMessage().length(); i++) {
+                message.append(' ');
+            }
+
+            message.append(usage.getPermission());
+            for (int i = 0; i < longestPermission - usage.getPermission().length(); i++) {
+                message.append(' ');
+            }
+
+            message.append(usage.getDescription());
+
+            messages.add(message.toString());
+        }
+
         if (messages.size() == 1) {
             return messages.iterator().next();
         }
