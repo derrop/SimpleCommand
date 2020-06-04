@@ -60,8 +60,11 @@ public class SimpleCommandTest {
         UsableCommand command = commandMap.registerSubCommands(new SomeCommand());
 
         UsableCommand newCommand = commandMap.getCommand("CoMmAnD");
-        Assert.assertSame(newCommand, command);
         Assert.assertNotNull(command);
+        Assert.assertSame(command, newCommand);
+
+        Assert.assertSame(command, commandMap.getCommand("some-prefix:command"));
+        Assert.assertSame(command, commandMap.getCommand("some-PrEfIx:CoMmAnD"));
 
         Assert.assertEquals("some.permission", command.getPermission());
         Assert.assertEquals("some description", command.getDescription());
