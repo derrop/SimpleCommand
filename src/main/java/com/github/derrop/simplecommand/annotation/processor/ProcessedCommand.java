@@ -91,7 +91,7 @@ public class ProcessedCommand implements UsableCommand, CommandExecutor, TabComp
     }
 
     @Override
-    public void execute(CommandSender sender, String command, String[] args, String commandLine, CommandProperties properties) {
+    public void execute(UsableCommand usableCommand, CommandSender sender, String command, String[] args, String commandLine, CommandProperties properties) {
         Optional<String> optionalInvalidMessage = this.subCommands.stream()
                 .map(subCommand -> subCommand.getInvalidArgumentMessage(args))
                 .filter(Objects::nonNull)
@@ -132,11 +132,13 @@ public class ProcessedCommand implements UsableCommand, CommandExecutor, TabComp
 
         if (subCommand.isAsync()) {
             CommandTranslator.SERVICE.execute(() -> subCommand.execute(
+                    usableCommand,
                     sender, command, new CommandArgumentWrapper(parsedArgs),
                     commandLine, subCommand.parseProperties(args), new HashMap<>()
             ));
         } else {
             subCommand.execute(
+                    usableCommand,
                     sender, command, new CommandArgumentWrapper(parsedArgs),
                     commandLine, subCommand.parseProperties(args), new HashMap<>()
             );

@@ -2,8 +2,10 @@ package com.github.derrop.simplecommand.executor;
 
 import com.github.derrop.simplecommand.CommandInterrupt;
 import com.github.derrop.simplecommand.CommandProperties;
-import com.github.derrop.simplecommand.sender.CommandSender;
+import com.github.derrop.simplecommand.UsableCommand;
 import com.github.derrop.simplecommand.argument.CommandArgumentWrapper;
+import com.github.derrop.simplecommand.map.CommandExecutionException;
+import com.github.derrop.simplecommand.sender.CommandSender;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -23,12 +25,18 @@ public class ReflectiveSubCommandExecutor implements SubCommandExecutor {
     private final Object instance;
     private final Collection<Method> methods;
 
+    private UsableCommand command;
+
     public ReflectiveSubCommandExecutor(Object instance, Collection<Method> methods) {
         for (Method method : methods) {
             this.validateParameters(method);
         }
         this.instance = instance;
         this.methods = methods;
+    }
+
+    public void setCommand(UsableCommand command) {
+        this.command = command;
     }
 
     private void validateParameters(Method method) {
@@ -40,7 +48,7 @@ public class ReflectiveSubCommandExecutor implements SubCommandExecutor {
     }
 
     @Override
-    public void execute(CommandSender sender, String command, CommandArgumentWrapper args, String commandLine, CommandProperties properties, Map<String, Object> internalProperties) {
+    public void execute(UsableCommand usableCommand, CommandSender sender, String command, CommandArgumentWrapper args, String commandLine, CommandProperties properties, Map<String, Object> internalProperties) {
         for (Method method : this.methods) {
             Parameter[] parameters = method.getParameters();
             Object[] values = new Object[method.getParameters().length];
@@ -68,7 +76,7 @@ public class ReflectiveSubCommandExecutor implements SubCommandExecutor {
             try {
                 method.invoke(this.instance, values);
             } catch (IllegalAccessException | InvocationTargetException exception) {
-                exception.printStackTrace();
+                throw new CommandExecutionException(usableCommand, sender, commandLine, exception.getCause());
             } catch (CommandInterrupt interrupt) {
                 break;
             }

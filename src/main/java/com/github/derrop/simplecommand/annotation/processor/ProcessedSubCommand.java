@@ -1,6 +1,7 @@
 package com.github.derrop.simplecommand.annotation.processor;
 
 import com.github.derrop.simplecommand.CommandProperties;
+import com.github.derrop.simplecommand.UsableCommand;
 import com.github.derrop.simplecommand.sender.CommandSender;
 import com.github.derrop.simplecommand.annotation.Command;
 import com.github.derrop.simplecommand.annotation.SubCommand;
@@ -28,7 +29,6 @@ public class ProcessedSubCommand implements SubCommandExecutor {
     private final boolean disableMinArgsIndicator;
 
     private int minArgs = -1;
-    private int exactArgs = -1;
     private final int maxArgs;
     private final ArgumentType<?>[] requiredArguments;
 
@@ -44,6 +44,7 @@ public class ProcessedSubCommand implements SubCommandExecutor {
         this.async = subCommand.async();
         this.disableMinArgsIndicator = !subCommand.showMinArgsIndicator();
 
+        this.minArgs = subCommand.minArgs();
         this.maxArgs = subCommand.maxArgs();
 
         this.wrappedExecutor = wrappedExecutor;
@@ -59,7 +60,7 @@ public class ProcessedSubCommand implements SubCommandExecutor {
      * @return {@code true} if this command requires it or {@code false} if not
      */
     public boolean requiresExactArgs() {
-        return this.exactArgs != -1 || (this.minArgs == -1 && this.maxArgs == -1);
+        return this.minArgs == -1 && this.maxArgs == -1;
     }
 
     /**
@@ -97,10 +98,10 @@ public class ProcessedSubCommand implements SubCommandExecutor {
         if (this.requiresMinArgs() && length < this.minArgs) {
             return false;
         }
-        if (this.propertiesEnabled && length >= (this.requiresExactArgs() ? this.exactArgs == -1 ? this.requiredArguments.length : this.exactArgs : this.minArgs)) {
+        if (this.propertiesEnabled && length >= (this.requiresExactArgs() ? this.requiredArguments.length : this.minArgs)) {
             return true;
         }
-        return (!this.requiresExactArgs() || (this.exactArgs == -1 ? this.requiredArguments.length : this.exactArgs) == length) && (!this.requiresMaxArgs() || length <= this.maxArgs);
+        return (!this.requiresExactArgs() || this.requiredArguments.length == length) && (!this.requiresMaxArgs() || length <= this.maxArgs);
     }
 
     //the returned pair contains the message of the first non-matching argument and the amount of non-matching, static arguments
@@ -176,7 +177,7 @@ public class ProcessedSubCommand implements SubCommandExecutor {
 
                 result.add(new CommandArgument(type, type.parse(args[i])));
             } else {
-                String currentValue = String.join(" ", Arrays.copyOfRange(args, Math.max(0, i - 1), Math.max(this.requiredArguments.length, Math.min(args.length, this.maxArgs))));
+                String currentValue = String.join(" ", Arrays.copyOfRange(args, Math.max(0, i - 1), Math.max(this.requiredArguments.length, Math.min(args.length, this.maxArgs == -1 ? Integer.MAX_VALUE : this.maxArgs))));
                 ArgumentType<?> type = this.requiredArguments[this.requiredArguments.length - 1];
 
                 if (type.isValidInput(currentValue)) {
@@ -232,7 +233,7 @@ public class ProcessedSubCommand implements SubCommandExecutor {
      * are never wrapped with brackets.<br>
      * <br>
      * Dynamic strings (any other {@link ArgumentType}) are wrapped with "&lt;&gt;" if they are required and
-     * with "[]" if they are optional (this can be set with the {@link #setMinArgs(int)} and {@link #setMaxArgs(int)} methods). TODO change setMinArgs and setMaxArgs
+     * with "[]" if they are optional (this can be set with the min args and max args in the {@link SubCommand} annotation).
      *
      * @return the arguments as a string split by spaces (the argument
      */
@@ -294,10 +295,6 @@ public class ProcessedSubCommand implements SubCommandExecutor {
         return this.minArgs;
     }
 
-    public int getExactArgs() {
-        return this.exactArgs;
-    }
-
     public int getMaxArgs() {
         return this.maxArgs;
     }
@@ -307,7 +304,7 @@ public class ProcessedSubCommand implements SubCommandExecutor {
     }
 
     @Override
-    public void execute(CommandSender sender, String command, CommandArgumentWrapper args, String commandLine, CommandProperties properties, Map<String, Object> internalProperties) {
-        this.wrappedExecutor.execute(sender, command, args, commandLine, properties, internalProperties);
+    public void execute(UsableCommand usableCommand, CommandSender sender, String command, CommandArgumentWrapper args, String commandLine, CommandProperties properties, Map<String, Object> internalProperties) {
+        this.wrappedExecutor.execute(usableCommand, sender, command, args, commandLine, properties, internalProperties);
     }
 }

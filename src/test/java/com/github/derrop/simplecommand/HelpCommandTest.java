@@ -7,6 +7,7 @@ import com.github.derrop.simplecommand.sender.CommandSender;
 import com.github.derrop.simplecommand.sender.DefaultCollectionCommandSender;
 import com.github.derrop.simplecommand.sender.DefaultConsoleCommandSender;
 import org.junit.Assert;
+import org.junit.ComparisonFailure;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -49,8 +50,13 @@ public class HelpCommandTest {
         Assert.assertEquals("Aliases: [help, ?]", messages.get(1));
         Assert.assertEquals("Description: Show a list of all commands or get help for a specific command", messages.get(2));
         Assert.assertEquals("Usage: ", messages.get(3));
-        Assert.assertEquals(" - help           | Show a list of all commands", messages.get(4));
-        Assert.assertEquals(" - help <command> | Get the usage for a specific command", messages.get(5));
+
+        String[] actual = new String[]{messages.get(4), messages.get(5)};
+        String[] expected = new String[]{
+                " - help           | Show a list of all commands",
+                " - help <command> | Get the usage for a specific command"
+        };
+        Assert.assertArrayEquals(expected, actual);
     }
 
 }

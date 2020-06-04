@@ -105,7 +105,7 @@ public class DefaultCommandMap implements CommandMap {
         args = Arrays.copyOfRange(args, 1, args.length);
 
         try {
-            command.execute(sender, commandName, args, line, CommandProperties.parseLine(args));
+            command.execute(command, sender, commandName, args, line, CommandProperties.parseLine(args));
         } catch (Throwable throwable) {
             throw new CommandExecutionException(command, sender, line, throwable);
         }

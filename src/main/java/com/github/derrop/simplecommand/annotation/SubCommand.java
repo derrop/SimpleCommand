@@ -37,6 +37,8 @@ public @interface SubCommand {
 
     ArgumentRequirement requirement() default ArgumentRequirement.EXACT;
 
+    int minArgs() default -1;
+
     int maxArgs() default -1;
 
 }
