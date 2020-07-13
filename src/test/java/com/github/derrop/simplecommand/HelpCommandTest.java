@@ -5,13 +5,10 @@ import com.github.derrop.simplecommand.map.CommandMap;
 import com.github.derrop.simplecommand.map.DefaultCommandMap;
 import com.github.derrop.simplecommand.sender.CommandSender;
 import com.github.derrop.simplecommand.sender.DefaultCollectionCommandSender;
-import com.github.derrop.simplecommand.sender.DefaultConsoleCommandSender;
 import org.junit.Assert;
-import org.junit.ComparisonFailure;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class HelpCommandTest {

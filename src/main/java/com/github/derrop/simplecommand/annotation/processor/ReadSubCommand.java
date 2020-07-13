@@ -6,8 +6,8 @@ import java.lang.reflect.Method;
 
 public class ReadSubCommand {
 
-    private SubCommand subCommand;
-    private Method method;
+    private final SubCommand subCommand;
+    private final Method method;
 
     public ReadSubCommand(SubCommand subCommand, Method method) {
         this.subCommand = subCommand;

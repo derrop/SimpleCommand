@@ -2,7 +2,6 @@ package com.github.derrop.simplecommand;
 
 import com.github.derrop.simplecommand.annotation.Argument;
 import com.github.derrop.simplecommand.annotation.Command;
-import com.github.derrop.simplecommand.annotation.Handler;
 import com.github.derrop.simplecommand.annotation.SubCommand;
 import com.github.derrop.simplecommand.argument.ArgumentType;
 import com.github.derrop.simplecommand.argument.CommandArgumentWrapper;
@@ -11,8 +10,6 @@ import com.github.derrop.simplecommand.map.CommandMap;
 import com.github.derrop.simplecommand.map.DefaultCommandMap;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.Map;
 
 import static com.github.derrop.simplecommand.argument.DefaultArgumentTypes.anyStringIgnoreCase;
 import static com.github.derrop.simplecommand.argument.DefaultArgumentTypes.dynamicString;

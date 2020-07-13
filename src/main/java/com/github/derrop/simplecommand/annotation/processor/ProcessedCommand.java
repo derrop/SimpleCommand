@@ -10,7 +10,6 @@ import com.github.derrop.simplecommand.argument.ParsedArguments;
 import com.github.derrop.simplecommand.executor.CommandExecutor;
 import com.github.derrop.simplecommand.executor.TabCompleter;
 import com.github.derrop.simplecommand.sender.CommandSender;
-import org.graalvm.compiler.debug.CSVUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;

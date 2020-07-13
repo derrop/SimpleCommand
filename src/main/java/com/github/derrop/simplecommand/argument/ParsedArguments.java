@@ -4,8 +4,8 @@ import com.github.derrop.simplecommand.annotation.processor.ProcessedSubCommand;
 
 public class ParsedArguments {
 
-    private ProcessedSubCommand subCommand;
-    private CommandArgument<?>[] arguments;
+    private final ProcessedSubCommand subCommand;
+    private final CommandArgument<?>[] arguments;
 
     public ParsedArguments(ProcessedSubCommand subCommand, CommandArgument<?>[] arguments) {
         this.subCommand = subCommand;
