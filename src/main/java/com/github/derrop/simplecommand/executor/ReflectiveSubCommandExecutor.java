@@ -41,7 +41,7 @@ public class ReflectiveSubCommandExecutor implements SubCommandExecutor {
 
     private void validateParameters(Method method) {
         for (Parameter parameter : method.getParameters()) {
-            if (Arrays.stream(ALLOWED_PARAMETERS).noneMatch(allowed -> allowed.getType().equals(parameter.getType()))) {
+            if (Arrays.stream(ALLOWED_PARAMETERS).noneMatch(allowed -> allowed.getType().isAssignableFrom(parameter.getType()))) {
                 throw new IllegalArgumentException("Parameter " + parameter.getName() + "@" + parameter.getType().getSimpleName() + " is not allowed on sub commands");
             }
         }
